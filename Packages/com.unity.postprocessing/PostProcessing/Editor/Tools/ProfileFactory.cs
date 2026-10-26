@@ -71,9 +71,9 @@ namespace UnityEditor.Rendering.PostProcessing
         }
     }
 
-    class DoCreatePostProcessProfile : EndNameEditAction
+    class DoCreatePostProcessProfile : AssetCreationEndAction
     {
-        public override void Action(int instanceId, string pathName, string resourceFile)
+        public override void Action(EntityId entityId, string pathName, string resourceFile)
         {
             var profile = ProfileFactory.CreatePostProcessProfileAtPath(pathName);
             ProjectWindowUtil.ShowCreatedAsset(profile);

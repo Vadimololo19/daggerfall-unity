@@ -35,8 +35,8 @@ namespace DaggerfallWorkshop.Game
         [SerializeField]
         private GameObject culledObjectsParent;
 
-        private Dictionary<int, CulledGameObject> culledObjects = new Dictionary<int, CulledGameObject>();
-        private List<int> keysToRemove = new List<int>();
+        private Dictionary<EntityId, CulledGameObject> culledObjects = new Dictionary<EntityId, CulledGameObject>();
+        private List<EntityId> keysToRemove = new List<EntityId>();
         private int cullIteration = 0;
 
         private int lastFrameCulledAndUnculledAllObjects = -1;
@@ -99,7 +99,7 @@ namespace DaggerfallWorkshop.Game
 
         public bool IsObjectCulled(GameObject obj)
         {
-            return obj && culledObjects.ContainsKey(obj.GetInstanceID());
+            return obj && culledObjects.ContainsKey(obj.GetEntityId());
         }
         private void UpdateAllCullableObjects(Vector3 playerPosition, bool skipDoors = true)
         {
@@ -157,7 +157,7 @@ namespace DaggerfallWorkshop.Game
                 if (!kvp.Value.gameObject || !kvp.Value.wasOriginalParentNull && !kvp.Value.originalParent || kvp.Value.wasObjectInside != GameManager.Instance.IsPlayerInside)
                     keysToRemove.Add(kvp.Key);
             }
-            foreach (int k in keysToRemove)
+            foreach (EntityId k in keysToRemove)
             {
                 if (culledObjects[k].gameObject)
                     Destroy(culledObjects[k].gameObject);
@@ -226,7 +226,7 @@ namespace DaggerfallWorkshop.Game
         {
             if (!objectToCull)
                 return false;
-            int objectToCullID = objectToCull.GetInstanceID();
+            EntityId objectToCullID = objectToCull.GetEntityId();
             if (objectToCull == null || culledObjects.ContainsKey(objectToCullID))
                 return false;
 
@@ -241,7 +241,7 @@ namespace DaggerfallWorkshop.Game
         {
             if (!objectToUnCull)
                 return false;
-            int objectToUncullID = objectToUnCull.GetInstanceID();
+            EntityId objectToUncullID = objectToUnCull.GetEntityId();
             if (!culledObjects.ContainsKey(objectToUncullID))
                 return false;
             CulledGameObject culledObject = culledObjects[objectToUncullID];
@@ -267,7 +267,7 @@ namespace DaggerfallWorkshop.Game
         {
             if (!dungeonBlock)
                 return false;
-            int objectToCullID = dungeonBlock.GetInstanceID();
+            EntityId objectToCullID = dungeonBlock.GetEntityId();
             if (dungeonBlock == null || culledObjects.ContainsKey(objectToCullID))
                 return false;
 
@@ -282,7 +282,7 @@ namespace DaggerfallWorkshop.Game
         {
             if (!dungeonBlock)
                 return false;
-            int objectToUncullID = dungeonBlock.GetInstanceID();
+            EntityId objectToUncullID = dungeonBlock.GetEntityId();
             if (!culledObjects.ContainsKey(objectToUncullID))
                 return false;
             CulledGameObject culledObject = culledObjects[objectToUncullID];
@@ -312,7 +312,7 @@ namespace DaggerfallWorkshop.Game
             foreach (var kvp in culledObjects)
                 keysToRemove.Add(kvp.Key);
 
-            foreach (int key in keysToRemove)
+            foreach (EntityId key in keysToRemove)
             {
                 CulledGameObject culledObject = culledObjects[key];
                 if (!culledObject.gameObject)

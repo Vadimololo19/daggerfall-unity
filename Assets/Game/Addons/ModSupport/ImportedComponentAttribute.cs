@@ -291,7 +291,7 @@ namespace DaggerfallWorkshop.Game.Utility.ModSupport
             }
 
             string assetKey = string.Format("{0}-{1}", mod.GUID, assetname);
-            float instanceID = gameObject.GetInstanceID();
+            float instanceID = gameObject.GetEntityId().GetHashCode();
 
             // Make sure a gameobject is not deserialized more than one time.
             // This can happen if is removed from cache then readded without being unloaded due to other references.
